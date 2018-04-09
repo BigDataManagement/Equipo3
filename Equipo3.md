@@ -8,21 +8,26 @@ __Miembros del equipo:__
 * Daniel Morales Londoño    
 
 ### Información del proyecto:
-__Equipo:__ #3
-__Motor de base de datos:__ MySQL
-__IDE:__ MySQL workbench
-__Integración de datos:__ Pentaho: Data Integration, Business Analytics and Big Data
+* __Equipo:__ #3
+* __Motor de base de datos:__ MySQL
+* __IDE:__ MySQL workbench
+* __Integración de datos:__ Pentaho: Data Integration, Business Analytics and Big Data
 
-###Objetivo:
+### Objetivo:
 Activar un workflow de gestión de datos en Pentaho Data Integration cuya fuente de datos son dos DBMSs (MySQL y MongoDB).
 
-###Importación de datos a MySQl y limpieza de los mismos
+### Importación de datos a MySQl y limpieza de los mismos
 Usamos dos archivos, ``movie_titles.csv`` y ``combined_data_3.txt``, para nuestra base de datos ``netflix``
 
 ### Creación de tablas
 Para cada uno de los archivos creamos su tabla correspondiente: ``movie_titles`` y ``scores_3``
 
 ```sql
+CREATE TABLE movie_titles(
+  id_pelicula INT NOT NULL primary key,
+  año_lanzamiento INT NOT NULL,
+  nombre_pelicula TEXT NOT NULL
+);
 
 CREATE TABLE scores_3(
   id_calificacion INT AUTO_INCREMENT primary key,
@@ -141,12 +146,11 @@ LOAD DATA LOCAL INFILE 'C:/Users/CAMILO/Desktop/gestion/prueba_convertida.csv' I
 ### Limpieza de datos:
 Borramos los registros de la tabla ``movie_titles`` que no están referenciados desde ``scores_3``
 ```sql
-	SET SQL_SAFE_UPDATES = 0;
-	DELETE FROM netflix.movie_titles
-	WHERE id_pelicula NOT IN
-    (
-    SELECT id_pelicula FROM netflix.scores_3
-    );
+SET SQL_SAFE_UPDATES = 0;
+DELETE FROM netflix.movie_titles
+WHERE id_pelicula NOT IN (
+  SELECT id_pelicula FROM netflix.scores_3
+);
 ```
 Antes de hacer la limpieza teníamos __17.762__ registros en ``movie_titles`` y luego de correr el query de limpieza, quedaron __4.156__ los demás __13.606__ registros no estaban referenciados en ``scores_3``
 
@@ -157,16 +161,16 @@ Primero descargamos la plataforma y buscamos los controladores necesarios para h
 El Workflow se desarrolló sólo con nuestro motor ya que el otro equipo no había terminado su parte.
 
 __Conexión:__
-![conection](http://img.fenixzone.net/i/f5pkUo6.jpeg)
+* ![conection](http://img.fenixzone.net/i/f5pkUo6.jpeg)
 
 __Mensaje:__
-![message](http://img.fenixzone.net/i/QUPk1rp.jpeg)
+* ![message](http://img.fenixzone.net/i/QUPk1rp.jpeg)
 
 __Creación:__
-![table1](http://img.fenixzone.net/i/kTg7IVo.jpeg)
-![table2](http://img.fenixzone.net/i/XTNSwUW.jpeg)
+* ![table1](http://img.fenixzone.net/i/kTg7IVo.jpeg)
+* ![table2](http://img.fenixzone.net/i/XTNSwUW.jpeg)
 
 ### Problemas
-	* __Transformación de datos:__ Inicialmente usamos un código en Python el cual no convertia efectivamente el archivo al formato en que desabamos, por lo tanto usamos Java para convertir el archivo.
-	* __Importación de datos a MySQL workbench:__ Estuvimos 2 días intentando subir los datos al framewrok sin exito, debido a problemas de rendimiento en las máquinas por el alto volumen de datos y la mala creación de la tablas.
-	* __Creación de workflow en Pentaho:__ En Pentaho tuvimos la dificultad de instalar el driver ya que no lo leía pero después nos dimos cuenta que había que restart el programa y funcionó correctamente.
+* __Transformación de datos:__ Inicialmente usamos un código en Python el cual no convertia efectivamente el archivo al formato en que desabamos, por lo tanto usamos Java para convertir el archivo.
+* __Importación de datos a MySQL workbench:__ Estuvimos 2 días intentando subir los datos al framewrok sin exito, debido a problemas de rendimiento en las máquinas por el alto volumen de datos y la mala creación de la tablas.
+* __Creación de workflow en Pentaho:__ En Pentaho tuvimos la dificultad de instalar el driver ya que no lo leía pero después nos dimos cuenta que había que restart el programa y funcionó correctamente.
